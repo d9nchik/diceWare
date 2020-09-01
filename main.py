@@ -1,16 +1,39 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from random import randint
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def read_data(file_name: str) -> dict:
+    word_dict = {}
+    with open(file_name) as file:
+        for line in file:
+            words = line.split()
+            word_dict[int(words[0])] = words[1]
+    return word_dict
 
 
-# Press the green button in the gutter to run the script.
+def generate_dice_throw() -> int:
+    return randint(1, 6)
+
+
+def generate_word(word_dict: dict) -> str:
+    number = 0
+    for n in range(5):
+        number *= 10
+        number += generate_dice_throw()
+    return word_dict[number]
+
+
+def generate_passphrase(word_number: int, word_dict: dict) -> str:
+    passphrase = generate_word(word_dict)
+    for n in range(word_number - 1):
+        passphrase += ' ' + generate_word(word_dict)
+    return passphrase
+
+
+def console_data():
+    word_dict = read_data('data.txt')
+    word_number = int(input('Enter number of words in your passphrase: '))
+    print(generate_passphrase(word_number, word_dict))
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    console_data()
