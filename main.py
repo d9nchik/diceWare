@@ -1,4 +1,5 @@
 from random import randint
+from sys import argv
 
 
 def read_data(file_name: str) -> dict:
@@ -7,6 +8,8 @@ def read_data(file_name: str) -> dict:
         for line in file:
             words = line.split()
             word_dict[int(words[0])] = words[1]
+    if len(word_dict) != 6 ** 5:
+        raise Exception('{} is corrupted'.format(file_name))
     return word_dict
 
 
@@ -35,5 +38,11 @@ def console_data():
     print(generate_passphrase(word_number, word_dict))
 
 
+def console_arguments():
+    word_dict = read_data('data.txt')
+    word_number = int(argv[1])
+    print(generate_passphrase(word_number, word_dict))
+
+
 if __name__ == '__main__':
-    console_data()
+    console_arguments()
